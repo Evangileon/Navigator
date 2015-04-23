@@ -38,15 +38,8 @@ public class SampleDynamicXYDataSource implements Runnable {
         }
     }
     
-    private static final double FREQUENCY = 5; // larger is lower frequency
-    private static final int MAX_AMP_SEED = 100;
-    private static final int MIN_AMP_SEED = 10;
-    private static final int AMP_STEP = 1;
     public static final int SINE1 = 0;
     public static final int SINE2 = 1;
-    private static final int SAMPLE_SIZE = 30;
-    private int phase = 0;
-    private int sinAmp = 1;
     private MyObservable notifier;
     private boolean keepRunning = false;
 
@@ -63,22 +56,12 @@ public class SampleDynamicXYDataSource implements Runnable {
 		// TODO Auto-generated method stub
 		try {
             keepRunning = true;
-            boolean isRising = true;
             while (keepRunning) {
 
                 Thread.sleep(10); // decrease or remove to speed up the refresh rate.
-                phase++;
-                if (sinAmp >= MAX_AMP_SEED) {
-                    isRising = false;
-                } else if (sinAmp <= MIN_AMP_SEED) {
-                    isRising = true;
-                }
-
-                if (isRising) {
-                    sinAmp += AMP_STEP;
-                } else {
-                    sinAmp -= AMP_STEP;
-                }
+               
+                // TODO checking bluetooth devices statues here
+                
                 notifier.notifyObservers();
             }
         } catch (InterruptedException e) {
@@ -86,8 +69,12 @@ public class SampleDynamicXYDataSource implements Runnable {
         }
 	}
 	
-	public int getItemCount(int series) {
-        return SAMPLE_SIZE;
+	/**
+	 * Used by series size
+	 * @return size of actual number of points
+	 */
+	public int getItemCount() {
+        return path.size();
     }
 
     public Number getX(int index) {

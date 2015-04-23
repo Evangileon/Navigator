@@ -1,13 +1,9 @@
 package com.jun.realtime.navigator;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
-
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.PointLabelFormatter;
-import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYStepMode;
 import com.jun.realtime.navigator.R;
@@ -34,12 +30,10 @@ public class MainActivity extends Activity {
 	
 	private static final String TAG = MainActivity.class.getName();
 
-	private int SERIES_LEN = 50;
 	private Shader WHITE_SHADER = new LinearGradient(1, 1, 1, 1, Color.WHITE,
 			Color.WHITE, Shader.TileMode.REPEAT);
 
 	private XYPlot plot;
-	private SimpleXYSeries series;
 	
 	private XYPlot dynamicPlot;
 	private PlotUpdater plotUpdater;
@@ -51,44 +45,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-//		plot = (XYPlot) findViewById(R.id.graph_metrics);
-//
-//		// For debugging.
-//		plot.setMarkupEnabled(true);
-//
-//		// Format Graph
-//		plot.getGraphWidget().getBackgroundPaint().setColor(Color.TRANSPARENT);
-//		plot.getGraphWidget().getGridBackgroundPaint().setShader(WHITE_SHADER);
-//		plot.getGraphWidget().getDomainGridLinePaint().setColor(Color.BLACK);
-//		plot.getGraphWidget().getDomainGridLinePaint()
-//				.setPathEffect(new DashPathEffect(new float[] { 3, 3 }, 1));
-//		plot.getGraphWidget().getRangeGridLinePaint().setColor(Color.BLACK);
-//		plot.getGraphWidget().getRangeGridLinePaint()
-//				.setPathEffect(new DashPathEffect(new float[] { 3, 3 }, 1));
-//		plot.getGraphWidget().getDomainOriginLinePaint().setColor(Color.BLACK);
-//		plot.getGraphWidget().getRangeOriginLinePaint().setColor(Color.BLACK);
-//		// plot.getGraphWidget().setMarginTop(10);
-//
-//		// Customize domain and range labels.
-//		plot.setDomainLabel("x-vals");
-//		plot.setRangeLabel("y-vals");
-//		plot.setRangeValueFormat(new DecimalFormat("0"));
-//
-//		// Make the domain and range step correctly
-//		plot.setRangeBoundaries(40, 160, BoundaryMode.FIXED);
-//		plot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, 20);
-//		plot.setDomainStep(XYStepMode.INCREMENT_BY_VAL, 60);
-//		plot.setTicksPerDomainLabel(2);
-//
-//		series = (SimpleXYSeries) getSeries();
-//		LineAndPointFormatter lpFormat = new LineAndPointFormatter(Color.BLACK,
-//				Color.BLACK, null, // No fill
-//				new PointLabelFormatter(Color.TRANSPARENT) // Don't show text at
-//															// points
-//		);
-//		plot.addSeries(series, lpFormat);
-//		plot.redraw();
-		
+		initializePlot();
+	}
+	
+	private void initializePlot() {
 		// get handles to our View defined in layout.xml:
         dynamicPlot = (XYPlot) findViewById(R.id.dynamicXYPlot);
  
@@ -115,7 +75,10 @@ public class MainActivity extends Activity {
         dynamicPlot.setDomainStepValue(5);
  
         dynamicPlot.setRangeStepMode(XYStepMode.INCREMENT_BY_VAL);
-        dynamicPlot.setRangeStepValue(10);
+        dynamicPlot.setRangeStepValue(5);
+        
+        dynamicPlot.setDomainLabel("x-vals");
+        dynamicPlot.setRangeLabel("y-vals");
  
         dynamicPlot.setRangeValueFormat(new DecimalFormat("###.#"));
  
@@ -132,15 +95,6 @@ public class MainActivity extends Activity {
 	public void onGraphStyleToggle(View v) {
 		boolean styleOn = ((ToggleButton) v).isChecked();
 
-		/*
-		 * RectF graphRect = plot.getGraphWidget().getGridRect(); float
-		 * segmentSize = 1.0f/6.0f; LinearGradient lg = new LinearGradient( 0,
-		 * graphRect.top, 0, graphRect.bottom, new int[]{ Color.RED,
-		 * Color.YELLOW, Color.GREEN, Color.WHITE}, new float[]{ 0,
-		 * segmentSize*2, segmentSize*3, segmentSize*5 }, Shader.TileMode.REPEAT
-		 * ); plot.getGraphWidget().getGridBackgroundPaint().setShader(lg);
-		 */
-
 		RectF rect = plot.getGraphWidget().getGridRect();
 		BitmapShader myShader = new BitmapShader(Bitmap.createScaledBitmap(
 				BitmapFactory.decodeResource(getResources(),
@@ -156,7 +110,6 @@ public class MainActivity extends Activity {
 					.setShader(WHITE_SHADER);
 
 		plot.redraw();
-
 	}
 	
 	@Override

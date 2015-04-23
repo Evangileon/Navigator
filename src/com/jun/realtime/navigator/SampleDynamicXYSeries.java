@@ -20,7 +20,7 @@ public class SampleDynamicXYSeries implements XYSeries {
 
     @Override
     public int size() {
-        return datasource.getItemCount(seriesIndex);
+        return datasource.getItemCount();
     }
 
     @Override
