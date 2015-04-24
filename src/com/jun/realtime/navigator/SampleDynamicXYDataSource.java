@@ -38,13 +38,12 @@ public class SampleDynamicXYDataSource implements Runnable {
         }
     }
     
-    public static final int SINE1 = 0;
-    public static final int SINE2 = 1;
     private MyObservable notifier;
     private boolean keepRunning = false;
 
-    {
+    public SampleDynamicXYDataSource() {
         notifier = new MyObservable();
+        
     }
 
     public void stopThread() {
@@ -58,13 +57,15 @@ public class SampleDynamicXYDataSource implements Runnable {
             keepRunning = true;
             while (keepRunning) {
 
-                Thread.sleep(10); // decrease or remove to speed up the refresh rate.
+                Thread.sleep(1000); // decrease or remove to speed up the refresh rate.
                
                 // TODO checking bluetooth devices statues here
                 
+                
                 notifier.notifyObservers();
             }
-        } catch (InterruptedException e) {
+            
+		} catch (InterruptedException e) {
             e.printStackTrace();
         }
 	}

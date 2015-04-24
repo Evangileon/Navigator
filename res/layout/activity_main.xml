@@ -43,4 +43,12 @@
         android:textOff="bg off"
         android:textOn="bg on" />
 
+    <Button
+        android:id="@+id/button_search_bluetooth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/style_toggle"
+        android:layout_centerHorizontal="true"
+        android:text="@string/search_bluetooth" />
+
 </RelativeLayout>
