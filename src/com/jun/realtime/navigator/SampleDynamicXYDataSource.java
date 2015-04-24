@@ -10,25 +10,6 @@ import android.os.Message;
 
 public class SampleDynamicXYDataSource implements Runnable {
 
-	class Point {
-		int x;
-		int y;
-
-		public Point(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-
-		public int getX() {
-			return x;
-		}
-
-		public int getY() {
-			return y;
-		}
-
-	}
-
 	List<Point> path = new ArrayList<>();
 
 	private final Handler handler = new Handler() {
@@ -69,7 +50,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		
 		try {
 			keepRunning = true;
 			while (keepRunning) {
@@ -77,7 +58,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 				Thread.sleep(1000); // decrease or remove to speed up the
 									// refresh rate.
 
-				// TODO checking bluetooth devices statues here, add one point
+				// TODO checking bluetooth devices status here, add one point
 				// refresh plot every 1 second
 				notifier.notifyObservers();
 			}

@@ -30,10 +30,14 @@ import android.widget.Button;
 import android.widget.ToggleButton;
 
 import com.luoshanshan.bluetoothle.*;
+import com.luoshanshan.wifidoor.WiFiDoorController;
 
 public class MainActivity extends Activity {
 
 	private static final String TAG = MainActivity.class.getName();
+	
+	private final String wifiServerAddress = "192.168.43.4";
+	private final int wifiServerPort = 5001;
 
 	private Shader WHITE_SHADER = new LinearGradient(1, 1, 1, 1, Color.WHITE,
 			Color.WHITE, Shader.TileMode.REPEAT);
@@ -42,8 +46,10 @@ public class MainActivity extends Activity {
 	private PlotUpdater plotUpdater;
 	private Thread sampleThread;
 	private SampleDynamicXYDataSource sampleData;
-
 	private BluetoothLE gatt;
+	
+	private Thread wifiThread;
+	private WiFiDoorController wifi;
 
 	private Button btnSearchBluetooth;
 
@@ -54,11 +60,36 @@ public class MainActivity extends Activity {
 
 		initializePlot();
 		initializeBluetooth();
+		initializeWiFi();
+	}
+	
+	private void initializeWiFi() {
+		wifi = new WiFiDoorController(wifiServerAddress, wifiServerPort);
+		
+		
+		wifiThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while(true) {
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					wifi.openDoor();
+				}
+			}
+		});
+		
+		wifiThread.setDaemon(true);
+		wifiThread.start();
 	}
 
 	private void initializeBluetooth() {
-		// TODO Auto-generated method stub
-
+		
 		gatt = new BluetoothLE(this.getApplicationContext());
 		gatt.registerHandler(sampleData.getHandler());
 
@@ -113,14 +144,14 @@ public class MainActivity extends Activity {
 		dynamicPlot.setRangeStepMode(XYStepMode.INCREMENT_BY_VAL);
 		dynamicPlot.setRangeStepValue(5);
 
-		dynamicPlot.setDomainLabel("x-vals");
-		dynamicPlot.setRangeLabel("y-vals");
+		dynamicPlot.setDomainLabel("X-vals");
+		dynamicPlot.setRangeLabel("Y-vals");
 
-		dynamicPlot.setRangeValueFormat(new DecimalFormat("###.#"));
+		dynamicPlot.setRangeValueFormat(new DecimalFormat("###"));
 
 		// uncomment this line to freeze the range boundaries:
-		dynamicPlot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
-		dynamicPlot.setDomainBoundaries(0, 100, BoundaryMode.FIXED);
+		dynamicPlot.setRangeBoundaries(0, 160, BoundaryMode.FIXED);
+		dynamicPlot.setDomainBoundaries(0, 90, BoundaryMode.FIXED);
 
 		// create a dash effect for domain and range grid lines:
 		DashPathEffect dashFx = new DashPathEffect(new float[] {

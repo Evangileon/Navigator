@@ -12,19 +12,15 @@ public class WiFiDoorController {
 	int threshold = 10;
 	boolean wifiConnected = false;
 	boolean isDoorOn = false;
-
-	private void doorControl(int x, int y) {
-		if (y <= threshold) {
-			if (!isDoorOn) {
-				isDoorOn = true;
-				ledCommand("LED ON");
-			}
-		} else {
-			if (isDoorOn) {
-				isDoorOn = false;
-				ledCommand("LED OFF");
-			}
-		}
+	
+	public WiFiDoorController(String address, int port) {
+		this.serverIpAddress = address;
+		this.port = port;
+	}
+	
+	public void openDoor() {
+		ledCommand("LED ON");
+		sendCommand("DOOR ON");
 	}
 
 	private void ledCommand(String cmd) {

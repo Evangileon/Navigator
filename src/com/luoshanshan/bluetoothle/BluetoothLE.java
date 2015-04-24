@@ -12,7 +12,6 @@ import android.content.Context;
 
 public class BluetoothLE {
 
-	private String tag = "myTag";
 	private BluetoothAdapter BTAdapter;
 	int DeviceCnt = 0;
 	private int NumOfDevice = 3;
@@ -103,9 +102,6 @@ public class BluetoothLE {
 
 	/**
 	 * One thread per Bluetooth
-	 * 
-	 * @author Jun
-	 *
 	 */
 	class RSSIRequestThread implements Runnable {
 		private BluetoothGatt gatt;
