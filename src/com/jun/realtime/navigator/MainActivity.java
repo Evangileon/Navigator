@@ -22,14 +22,11 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.luoshanshan.bluetoothle.*;
@@ -63,14 +60,7 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 
 		gatt = new BluetoothLE(this.getApplicationContext());
-		gatt.setUIHandler(new Handler() {
-			private TextView rssiMsg;
-
-			@Override
-			public void handleMessage(Message msg) {
-
-			}
-		});
+		gatt.registerHandler(sampleData.getHandler());
 
 		btnSearchBluetooth = (Button) findViewById(R.id.button_search_bluetooth);
 		btnSearchBluetooth.setOnClickListener(new OnClickListener() {

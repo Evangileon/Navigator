@@ -18,7 +18,7 @@ public class BluetoothLE {
 	private int NumOfDevice = 3;
 
 	Context context;
-	Handler uiHandler;
+	Handler externalHandler;
 
 	private boolean gattConnectReadRssiOn;
 
@@ -27,8 +27,8 @@ public class BluetoothLE {
 		initialize();
 	}
 
-	public void setUIHandler(Handler handler) {
-		uiHandler = handler;
+	public void registerHandler(Handler handler) {
+		externalHandler = handler;
 	}
 
 	private void initialize() {
@@ -77,6 +77,7 @@ public class BluetoothLE {
 	// Gatt Callback
 	private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 
+		@Override
 		public void onConnectionStateChange(BluetoothGatt gatt, int status,
 				int newState) {
 			if (newState == BluetoothProfile.STATE_CONNECTED) {
@@ -90,11 +91,12 @@ public class BluetoothLE {
 			}
 		}
 
+		@Override
 		public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
 			Message msg = Message.obtain();
 			msg.arg1 = rssi;
 			msg.arg2 = getDeviceId(gatt);
-			uiHandler.sendMessage(msg);
+			externalHandler.sendMessage(msg);
 			// System.out.println("#########data received###########");
 		}
 	};

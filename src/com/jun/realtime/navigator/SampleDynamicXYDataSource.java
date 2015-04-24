@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.os.Handler;
+import android.os.Message;
+
 
 public class SampleDynamicXYDataSource implements Runnable {
 	
@@ -29,6 +32,17 @@ public class SampleDynamicXYDataSource implements Runnable {
 	
 	List<Point> path = new ArrayList<>();
 	
+	private final Handler handler = new Handler() {
+    	@Override
+		public void handleMessage(Message msg) {
+    		// TODO action when receive bluetooth data
+		}
+    };
+	
+	public Handler getHandler() {
+		return handler;
+	}
+
 	// encapsulates management of the observers watching this datasource for update events:
     class MyObservable extends Observable {
         @Override
@@ -59,7 +73,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 
                 Thread.sleep(1000); // decrease or remove to speed up the refresh rate.
                
-                // TODO checking bluetooth devices statues here
+                // TODO checking bluetooth devices statues here, add one point
                 
                 
                 notifier.notifyObservers();
