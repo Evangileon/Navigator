@@ -8,13 +8,12 @@ import java.util.Observer;
 import android.os.Handler;
 import android.os.Message;
 
-
 public class SampleDynamicXYDataSource implements Runnable {
-	
+
 	class Point {
 		int x;
 		int y;
-		
+
 		public Point(int x, int y) {
 			this.x = x;
 			this.y = y;
@@ -27,109 +26,114 @@ public class SampleDynamicXYDataSource implements Runnable {
 		public int getY() {
 			return y;
 		}
-		
+
 	}
-	
+
 	List<Point> path = new ArrayList<>();
-	
+
 	private final Handler handler = new Handler() {
-    	@Override
+		@Override
 		public void handleMessage(Message msg) {
-    		// TODO action when receive bluetooth data
-    		int rssi = msg.arg1;
-    		int deviceId = msg.arg2;
-    		
-    		
+			// TODO action when receive bluetooth data
+			int rssi = msg.arg1;
+			int deviceId = msg.arg2;
+
 		}
-    };
-	
+	};
+
 	public Handler getHandler() {
 		return handler;
 	}
 
-	// encapsulates management of the observers watching this datasource for update events:
-    class MyObservable extends Observable {
-        @Override
-        public void notifyObservers() {
-            setChanged();
-            super.notifyObservers();
-        }
-    }
-    
-    private MyObservable notifier;
-    private boolean keepRunning = false;
+	// encapsulates management of the observers watching this datasource for
+	// update events:
+	class MyObservable extends Observable {
+		@Override
+		public void notifyObservers() {
+			setChanged();
+			super.notifyObservers();
+		}
+	}
 
-    public SampleDynamicXYDataSource() {
-        notifier = new MyObservable();
-        
-    }
+	private MyObservable notifier;
+	private boolean keepRunning = false;
 
-    public void stopThread() {
-        keepRunning = false;
-    }
+	public SampleDynamicXYDataSource() {
+		notifier = new MyObservable();
+
+	}
+
+	public void stopThread() {
+		keepRunning = false;
+	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-            keepRunning = true;
-            while (keepRunning) {
+			keepRunning = true;
+			while (keepRunning) {
 
-                Thread.sleep(1000); // decrease or remove to speed up the refresh rate.
-               
-                // TODO checking bluetooth devices statues here, add one point
-                // refresh plot every 1 second
-                notifier.notifyObservers();
-            }
-            
+				Thread.sleep(1000); // decrease or remove to speed up the
+									// refresh rate.
+
+				// TODO checking bluetooth devices statues here, add one point
+				// refresh plot every 1 second
+				notifier.notifyObservers();
+			}
+
 		} catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+			e.printStackTrace();
+		}
 	}
-	
+
 	/**
 	 * Add one point to the end of path
-	 * @param x axis
-	 * @param y axis
+	 * 
+	 * @param x
+	 *            axis
+	 * @param y
+	 *            axis
 	 */
 	public void addPoint(int x, int y) {
 		if (path == null) {
 			path = new ArrayList<>();
 		}
-		
+
 		path.add(new Point(x, y));
 	}
-	
+
 	/**
 	 * Used by series size
+	 * 
 	 * @return size of actual number of points
 	 */
 	public int getItemCount() {
-        return path.size();
-    }
+		return path.size();
+	}
 
-    public Number getX(int index) {
-        if (index >= path.size() || index < 0) {
-        	return 0;
-        }
-        
-        return path.get(index).getX();
-    }
+	public Number getX(int index) {
+		if (index >= path.size() || index < 0) {
+			return 0;
+		}
 
-    public Number getY(int index) {
-    	if (index >= path.size() || index < 0) {
-        	return 0;
-        }
-        
-        return path.get(index).getY();
-    }
+		return path.get(index).getX();
+	}
 
-    public void addObserver(Observer observer) {
-        notifier.addObserver(observer);
-    }
+	public Number getY(int index) {
+		if (index >= path.size() || index < 0) {
+			return 0;
+		}
 
-    public void removeObserver(Observer observer) {
-        notifier.deleteObserver(observer);
-    }
+		return path.get(index).getY();
+	}
+
+	public void addObserver(Observer observer) {
+		notifier.addObserver(observer);
+	}
+
+	public void removeObserver(Observer observer) {
+		notifier.deleteObserver(observer);
+	}
 
 }

@@ -119,7 +119,8 @@ public class MainActivity extends Activity {
 		dynamicPlot.setRangeValueFormat(new DecimalFormat("###.#"));
 
 		// uncomment this line to freeze the range boundaries:
-		dynamicPlot.setRangeBoundaries(-100, 100, BoundaryMode.FIXED);
+		dynamicPlot.setRangeBoundaries(0, 100, BoundaryMode.FIXED);
+		dynamicPlot.setDomainBoundaries(0, 100, BoundaryMode.FIXED);
 
 		// create a dash effect for domain and range grid lines:
 		DashPathEffect dashFx = new DashPathEffect(new float[] {
