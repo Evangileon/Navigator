@@ -36,6 +36,10 @@ public class SampleDynamicXYDataSource implements Runnable {
     	@Override
 		public void handleMessage(Message msg) {
     		// TODO action when receive bluetooth data
+    		int rssi = msg.arg1;
+    		int deviceId = msg.arg2;
+    		
+    		
 		}
     };
 	
@@ -74,14 +78,26 @@ public class SampleDynamicXYDataSource implements Runnable {
                 Thread.sleep(1000); // decrease or remove to speed up the refresh rate.
                
                 // TODO checking bluetooth devices statues here, add one point
-                
-                
+                // refresh plot every 1 second
                 notifier.notifyObservers();
             }
             
 		} catch (InterruptedException e) {
             e.printStackTrace();
         }
+	}
+	
+	/**
+	 * Add one point to the end of path
+	 * @param x axis
+	 * @param y axis
+	 */
+	public void addPoint(int x, int y) {
+		if (path == null) {
+			path = new ArrayList<>();
+		}
+		
+		path.add(new Point(x, y));
 	}
 	
 	/**
