@@ -12,6 +12,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 	List<Point> path = new ArrayList<>();
 
+
 	private final Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -19,12 +20,20 @@ public class SampleDynamicXYDataSource implements Runnable {
 			int rssi = msg.arg1;
 			int deviceId = msg.arg2;
 
+            if(deviceId == 1){
+                externalHandler.obtainMessage(0, msg.arg1, 0).sendToTarget();
+            }
 		}
 	};
 
 	public Handler getHandler() {
 		return handler;
 	}
+
+    Handler externalHandler;
+    void registerHandler(Handler eHandler){
+        externalHandler = eHandler;
+    }
 
 	// encapsulates management of the observers watching this datasource for
 	// update events:

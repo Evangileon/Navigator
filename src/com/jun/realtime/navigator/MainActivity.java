@@ -1,6 +1,7 @@
 package com.jun.realtime.navigator;
 
 import java.text.DecimalFormat;
+import java.util.logging.Handler;
 
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
@@ -22,6 +23,7 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,9 +49,8 @@ public class MainActivity extends Activity {
 	private Thread sampleThread;
 	private SampleDynamicXYDataSource sampleData;
 	private BluetoothLE gatt;
-	
-	private Thread wifiThread;
-	private WiFiDoorController wifi;
+// 	private Thread wifiThread;
+
 
 	private Button btnSearchBluetooth;
 
@@ -59,18 +60,18 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		initializePlot();
-		initializeBluetooth();
 		initializeWiFi();
+        initializeBluetooth();
 	}
 	
 	private void initializeWiFi() {
-		wifi = new WiFiDoorController(wifiServerAddress, wifiServerPort);
-		
-		
-		wifiThread = new Thread(new Runnable() {
-			
+        WiFiDoorController wifi = new WiFiDoorController(wifiServerAddress, wifiServerPort);
+        sampleData.registerHandler(wifi.getWifiHandler());
+
+        /*
 			@Override
-			public void run() {
+			public void run(){
+
 				while(true) {
 					try {
 						Thread.sleep(10000);
@@ -83,9 +84,11 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
-		
+
 		wifiThread.setDaemon(true);
 		wifiThread.start();
+        */
+
 	}
 
 	private void initializeBluetooth() {

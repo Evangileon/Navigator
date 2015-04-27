@@ -1,5 +1,9 @@
 package com.luoshanshan.wifidoor;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -9,19 +13,86 @@ import java.net.UnknownHostException;
 public class WiFiDoorController {
 	private String serverIpAddress;
 	private int port;
-	int threshold = 10;
+	int threshold = -70;
 	boolean wifiConnected = false;
 	boolean isDoorOn = false;
+    private Handler wifiHandler;
+    private Thread wifiThread;
+    int prevRssi = 0;
+
+    public WiFiDoorController(String address, int sport) {
+		serverIpAddress = address;
+		port = sport;
+        wifiThread = new wifiThread();
+        wifiThread.start();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class wifiThread extends Thread{
+
+        public void run(){
+           Looper.prepare();
+
+            wifiHandler = new Handler() {
+
+                public void handleMessage(Message msg) {
+                    // process incoming messages here
+                    int rssi = msg.arg1;
+
+                    if(doorControlOn(rssi) == true){
+                        if(!isDoorOn) {
+                            openDoor();
+                            isDoorOn = true;
+                        }
+                    } else{
+                        if(isDoorOn){
+                            closeDoor();
+                            isDoorOn = false;
+                        }
+                    }
+                }
+            };
+
+           Looper.loop();
+        }
+
+    }
+
+    public Handler getWifiHandler(){
+        return wifiHandler;
+    }
+
+    public Thread getWifiThread(){
+        return wifiThread;
+    }
+
+    private boolean doorControlOn(int vRssi){
+        boolean ret = false;
+        if(vRssi >= threshold) {
+            if(prevRssi >= threshold)
+                ret = true;
+        }
+        else {
+            if(prevRssi < threshold)
+                ret = false;
+        }
+
+        prevRssi = vRssi;
+        return ret;
+    }
 	
-	public WiFiDoorController(String address, int port) {
-		this.serverIpAddress = address;
-		this.port = port;
-	}
-	
-	public void openDoor() {
+	private void openDoor() {
 		ledCommand("LED ON");
-		sendCommand("DOOR ON");
+//		sendCommand("DOOR ON");
 	}
+
+    private void closeDoor(){
+        ledCommand("LED OFF");
+    }
 
 	private void ledCommand(String cmd) {
 		if (!wifiConnected) {
