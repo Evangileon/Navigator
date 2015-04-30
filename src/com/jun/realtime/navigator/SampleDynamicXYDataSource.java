@@ -17,40 +17,44 @@ public class SampleDynamicXYDataSource implements Runnable {
 	int[] rssiValues = new int[3];
 	boolean[] deviceScanned = new boolean[3];
 
+	private Handler handler = null;
+	
 	@SuppressLint("HandlerLeak")
-	private final Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO action when receive bluetooth data
-			int rssi = msg.arg1;
-			int deviceId = msg.arg2;
-			
-			if (deviceId > 3 || deviceId < 0) {
-				return;
-			}
-			
-			rssiValues[deviceId] = rssi;
-			deviceScanned[deviceId] = true;
-			
-			for (boolean b : deviceScanned) {
-				if (b == false) {
-					// not sufficent rssi
+	public void initializeHandler() {
+		handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO action when receive bluetooth data
+				int rssi = msg.arg1;
+				int deviceId = msg.arg2;
+				
+				if (deviceId > 3 || deviceId < 0) {
 					return;
 				}
-			}
-			
-			// then calculate the x-y position
-			Point newPoint = positioningAlgorithm.getPositionUsingRSSI(rssiValues);
-			if (newPoint != null) {
-				addPoint(newPoint);
-			}
 				
-			// clear scan flags
-			for (int i = 0; i < deviceScanned.length; i++) {
-				deviceScanned[i] = false;
+				rssiValues[deviceId] = rssi;
+				deviceScanned[deviceId] = true;
+				
+				for (boolean b : deviceScanned) {
+					if (b == false) {
+						// not sufficent rssi
+						return;
+					}
+				}
+				
+				// then calculate the x-y position
+				Point newPoint = positioningAlgorithm.getPositionUsingRSSI(rssiValues);
+				if (newPoint != null) {
+					addPoint(newPoint);
+				}
+					
+				// clear scan flags
+				for (int i = 0; i < deviceScanned.length; i++) {
+					deviceScanned[i] = false;
+				}
 			}
-		}
-	};
+		};
+	}
 
 	public Handler getHandler() {
 		return handler;

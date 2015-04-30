@@ -11,6 +11,8 @@ import com.jun.realtime.navigator.R;
 import com.jun.realtime.navigator.MainActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -34,8 +36,8 @@ import com.luoshanshan.wifidoor.WiFiDoorController;
 
 public class MainActivity extends Activity {
 
-	//private static final String TAG = MainActivity.class.getName();
-	
+	// private static final String TAG = MainActivity.class.getName();
+
 	private final String wifiServerAddress = "192.168.43.4";
 	private final int wifiServerPort = 5001;
 
@@ -47,7 +49,7 @@ public class MainActivity extends Activity {
 	private Thread sampleThread;
 	private SampleDynamicXYDataSource sampleData;
 	private BluetoothLE gatt;
-	
+
 	private Thread wifiThread;
 	private WiFiDoorController wifi;
 
@@ -62,34 +64,33 @@ public class MainActivity extends Activity {
 		initializeBluetooth();
 		initializeWiFi();
 	}
-	
+
 	private void initializeWiFi() {
 		wifi = new WiFiDoorController(wifiServerAddress, wifiServerPort);
-		
-		
+
 		wifiThread = new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				while(true) {
+				while (true) {
 					try {
 						Thread.sleep(10000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 					wifi.openDoor();
 				}
 			}
 		});
-		
+
 		wifiThread.setDaemon(true);
 		wifiThread.start();
 	}
 
 	private void initializeBluetooth() {
-		
+
 		gatt = new BluetoothLE(this.getApplicationContext());
 		gatt.registerHandler(sampleData.getHandler());
 
@@ -164,15 +165,29 @@ public class MainActivity extends Activity {
 		dynamicPlot.getGraphWidget().getRangeGridLinePaint()
 				.setPathEffect(dashFx);
 	}
+	
+	public void messageBox(String title, String text) {
+		new AlertDialog.Builder(this) 
+        .setTitle(title) 
+        .setMessage(text) 
+        .setPositiveButton("OK", new DialogInterface.OnClickListener() { 
+                public void onClick(DialogInterface arg0, int arg1) { 
+                        // Some stuff to do when ok got clicked 
+                } 
+        })  
+        .show(); 
+	}
 
 	public void onGraphStyleToggle(View v) {
 		boolean styleOn = ((ToggleButton) v).isChecked();
 
 		RectF rect = dynamicPlot.getGraphWidget().getGridRect();
+		Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(),
+				R.drawable.graph_background);
 		BitmapShader myShader = new BitmapShader(Bitmap.createScaledBitmap(
-				BitmapFactory.decodeResource(getResources(),
-						R.drawable.graph_background), 1, (int) rect.height(),
-				false), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+				backgroundBitmap, (int) rect.width(), (int) rect.height(), false),
+				Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+		
 		Matrix m = new Matrix();
 		m.setTranslate(rect.left, rect.top);
 		myShader.setLocalMatrix(m);
