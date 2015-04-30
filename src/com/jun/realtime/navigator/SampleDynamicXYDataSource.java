@@ -4,21 +4,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
+import com.jiangming.positioning.PositioningAlgorithm;
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 
 public class SampleDynamicXYDataSource implements Runnable {
+	
+	private PositioningAlgorithm positioningAlgorithm;
 
 	List<Point> path = new ArrayList<>();
+	int[] rssiValues = new int[3];
+	boolean[] deviceScanned = new boolean[3];
 
+	@SuppressLint("HandlerLeak")
 	private final Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO action when receive bluetooth data
 			int rssi = msg.arg1;
 			int deviceId = msg.arg2;
-
+			
+			if (deviceId > 3 || deviceId < 0) {
+				return;
+			}
+			
+			rssiValues[deviceId] = rssi;
+			deviceScanned[deviceId] = true;
+			
+			for (boolean b : deviceScanned) {
+				if (b == false) {
+					// not sufficent rssi
+					return;
+				}
+			}
+			
+			// then calculate the x-y position
+			Point newPoint = positioningAlgorithm.getPositionUsingRSSI(rssiValues);
+			if (newPoint != null) {
+				addPoint(newPoint);
+			}
+				
+			// clear scan flags
+			for (int i = 0; i < deviceScanned.length; i++) {
+				deviceScanned[i] = false;
+			}
 		}
 	};
 
@@ -41,7 +71,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 	public SampleDynamicXYDataSource() {
 		notifier = new MyObservable();
-
+		positioningAlgorithm = new PositioningAlgorithm();
 	}
 
 	public void stopThread() {
@@ -66,6 +96,13 @@ public class SampleDynamicXYDataSource implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void addPoint(Point point) {
+		if (point == null) {
+			return;
+		}
+		addPoint(point.x, point.y);
 	}
 
 	/**

@@ -34,7 +34,7 @@ import com.luoshanshan.wifidoor.WiFiDoorController;
 
 public class MainActivity extends Activity {
 
-	private static final String TAG = MainActivity.class.getName();
+	//private static final String TAG = MainActivity.class.getName();
 	
 	private final String wifiServerAddress = "192.168.43.4";
 	private final int wifiServerPort = 5001;
@@ -113,6 +113,9 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 	}
 
+	/**
+	 * Must before initializeBluetooth
+	 */
 	private void initializePlot() {
 		// get handles to our View defined in layout.xml:
 		dynamicPlot = (XYPlot) findViewById(R.id.dynamicXYPlot);
