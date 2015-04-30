@@ -5,9 +5,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class PlotUpdater implements Observer {
-	Plot plot;
+	Plot<?, ?, ?> plot;
 	 
-    public PlotUpdater(Plot plot) {
+    public PlotUpdater(Plot<?, ?, ?> plot) {
         this.plot = plot;
     }
 
