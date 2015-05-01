@@ -79,7 +79,6 @@ public class SampleDynamicXYDataSource implements Runnable {
 	public SampleDynamicXYDataSource() {
 		notifier = new MyObservable();
 		positioningAlgorithm = new PositioningAlgorithm();
-		positioningAlgorithm.readDataFromTxtFile();
 		initializeHandler();
 	}
 

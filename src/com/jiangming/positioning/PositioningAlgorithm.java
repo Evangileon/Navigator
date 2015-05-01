@@ -1,16 +1,32 @@
 package com.jiangming.positioning;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
 import com.jun.realtime.navigator.*;
 
 public class PositioningAlgorithm {
 
-	private int[][] estimationTable = null;
+	private int[][] estimationTable = {
+			{-91, -100, -100, 0, 0},
+			{-88, -100, -100, 0, 3},
+			{-84, -100, -100, 0, 6},
+			{-82, -100, -100, 0, 9},
+			{-78, -100, -100, 0, 12},
+			{-71, -100, -100, 3, 12},
+			{-79, -91, -100, 6, 12},
+			{-85, -85, -100, 9, 12},
+			{-87, -79, -100, 12, 12},
+			{-88, -74, -100, 15, 12},
+			{-91, -76, -100, 18, 12},
+			{-92, -84, -88, 21, 12},
+			{-92, -86, -82, 24, 12},
+			{-94, -89, -73, 27, 12},
+			{-94, -91, -60, 30, 12},
+			{-94, -91, -62, 30, 9},
+			{-94, -91, -77, 30, 6},
+			{-94, -91, -81, 30, 3},
+			{-94, -91, -86, 30, 0},
+			{-94, -91, -88, 30, -3}
+	};
+	
 	public final static String estimationDataPath = "data/estimation-data.txt";
 
 	/**
@@ -46,33 +62,33 @@ public class PositioningAlgorithm {
 		return new Point(estimationTable[lastSlot][3], estimationTable[lastSlot][4]);
 	}
 
-	public void readDataFromTxtFile() {
-
-		ArrayList<String> list = new ArrayList<String>();
-		String s;
-
-		try {
-			InputStreamReader isr = new InputStreamReader(new FileInputStream(
-					estimationDataPath));
-			BufferedReader br = new BufferedReader(isr);
-			while ((s = br.readLine()) != null) {
-				list.add(s);
-			}
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-
-		estimationTable = new int[list.size()][];
-
-		for (int i = 0; i < list.size(); i++) {
-			String[] params = list.get(i).split(" ");
-			estimationTable[i] = new int[params.length];
-
-			for (int j = 0; j < params.length; j++) {
-				estimationTable[i][j] = Integer.parseInt(params[j]);
-			}
-		}
-	}
+//	public void readDataFromTxtFile() {
+//
+//		ArrayList<String> list = new ArrayList<String>();
+//		String s;
+//
+//		try {
+//			InputStreamReader isr = new InputStreamReader(new FileInputStream(
+//					estimationDataPath));
+//			BufferedReader br = new BufferedReader(isr);
+//			while ((s = br.readLine()) != null) {
+//				list.add(s);
+//			}
+//			br.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return;
+//		}
+//
+//		estimationTable = new int[list.size()][];
+//
+//		for (int i = 0; i < list.size(); i++) {
+//			String[] params = list.get(i).split(" ");
+//			estimationTable[i] = new int[params.length];
+//
+//			for (int j = 0; j < params.length; j++) {
+//				estimationTable[i][j] = Integer.parseInt(params[j]);
+//			}
+//		}
+//	}
 }
