@@ -11,7 +11,7 @@ import com.jun.realtime.navigator.*;
 public class PositioningAlgorithm {
 
 	private int[][] estimationTable = null;
-	public final static String estimationDataPath = "data/estimation-data.txt";
+	public final static String estimationDataPath = "asset/estimation-data.txt";
 
 	/**
 	 * Calculate the position point using RSSI
