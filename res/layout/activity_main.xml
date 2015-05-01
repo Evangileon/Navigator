@@ -51,4 +51,15 @@
         android:layout_centerHorizontal="true"
         android:text="@string/search_bluetooth" />
 
+    <ToggleButton
+        android:id="@+id/draw_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button_search_bluetooth"
+        android:layout_toEndOf="@+id/button_search_bluetooth"
+        android:checked="true"
+        android:onClick="onDrawThreadToggle"
+        android:textOff="draw off"
+        android:textOn="draw on" />
+
 </RelativeLayout>

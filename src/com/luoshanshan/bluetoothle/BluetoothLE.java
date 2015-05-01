@@ -1,5 +1,7 @@
 package com.luoshanshan.bluetoothle;
 
+import java.util.ArrayList;
+
 import android.os.Handler;
 import android.os.Message;
 import android.bluetooth.BluetoothAdapter;
@@ -17,7 +19,7 @@ public class BluetoothLE {
 	private int NumOfDevice = 3;
 
 	Context context;
-	Handler externalHandler;
+	ArrayList<Handler> externalHandlers = new ArrayList<>();
 
 	private boolean gattConnectReadRssiOn;
 
@@ -27,7 +29,13 @@ public class BluetoothLE {
 	}
 
 	public void registerHandler(Handler handler) {
-		externalHandler = handler;
+		externalHandlers.add(handler);
+	}
+	
+	private void sendMessageToHandlers(Message msg) {
+		for (Handler handler : externalHandlers) {
+			handler.sendMessage(msg);
+		}
 	}
 
 	private void initialize() {
@@ -95,7 +103,7 @@ public class BluetoothLE {
 			Message msg = Message.obtain();
 			msg.arg1 = rssi;
 			msg.arg2 = getDeviceId(gatt);
-			externalHandler.sendMessage(msg);
+			sendMessageToHandlers(msg);
 			System.out.println("device: " + msg.arg2 + " , RSSI = " + msg.arg1);
 			// System.out.println("#########data received###########");
 		}

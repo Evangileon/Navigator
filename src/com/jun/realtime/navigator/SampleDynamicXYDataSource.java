@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 
 public class SampleDynamicXYDataSource implements Runnable {
-	
+
 	private PositioningAlgorithm positioningAlgorithm;
 
 	List<Point> path = new ArrayList<>();
@@ -18,40 +18,49 @@ public class SampleDynamicXYDataSource implements Runnable {
 	boolean[] deviceScanned = new boolean[3];
 
 	private Handler handler = null;
-	
-	private boolean plotAvailable = false;
-	
+
+	private boolean timeSlotAvailable = false;
+	private boolean dataSourceEnabled = true;
+
 	@SuppressLint("HandlerLeak")
 	public void initializeHandler() {
 		handler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
+
+				if (!dataSourceEnabled) {
+					// ignore message
+					return;
+				}
+
 				// TODO action when receive bluetooth data
 				int rssi = msg.arg1;
 				int deviceId = msg.arg2 - 1;
-				
+
 				if (deviceId > 2 || deviceId < 0) {
 					return;
 				}
-					
+
 				rssiValues[deviceId] = rssi;
 				deviceScanned[deviceId] = true;
-				
+
 				for (boolean b : deviceScanned) {
 					if (b == false) {
 						// not sufficent rssi
 						return;
 					}
 				}
-				
+
 				// then calculate the x-y position
-				Point newPoint = positioningAlgorithm.getPositionUsingRSSI(rssiValues);
-				System.out.println("X = " + newPoint.getX() + " , Y = " + newPoint.getY());
-				if (newPoint != null && plotAvailable) {
+				Point newPoint = positioningAlgorithm
+						.getPositionUsingRSSI(rssiValues);
+				System.out.println("X = " + newPoint.getX() + " , Y = "
+						+ newPoint.getY());
+				if (newPoint != null && timeSlotAvailable) {
 					addPoint(linearScaling(newPoint));
-					plotAvailable = false;
+					timeSlotAvailable = false;
 				}
-					
+
 				// clear scan flags
 				for (int i = 0; i < deviceScanned.length; i++) {
 					deviceScanned[i] = false;
@@ -59,11 +68,11 @@ public class SampleDynamicXYDataSource implements Runnable {
 			}
 		};
 	}
-	
+
 	public Point linearScaling(Point point) {
 		int x = point.x * 75 / 12;
 		int y = point.y * 155 / 30;
-		
+
 		return new Point(x, y);
 	}
 
@@ -85,6 +94,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 	private boolean keepRunning = false;
 
 	public SampleDynamicXYDataSource() {
+		dataSourceEnabled = true;
 		notifier = new MyObservable();
 		positioningAlgorithm = new PositioningAlgorithm();
 		initializeHandler();
@@ -96,7 +106,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 	@Override
 	public void run() {
-		
+
 		try {
 			keepRunning = true;
 			while (keepRunning) {
@@ -106,15 +116,18 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 				// TODO checking bluetooth devices status here, add one point
 				// refresh plot every 1 second
-				plotAvailable = true;
-				notifier.notifyObservers();
+				timeSlotAvailable = true;
+
+				if (dataSourceEnabled) {
+					notifier.notifyObservers();
+				}
 			}
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void addPoint(Point point) {
 		if (point == null) {
 			return;
@@ -169,6 +182,10 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 	public void removeObserver(Observer observer) {
 		notifier.deleteObserver(observer);
+	}
+	
+	public void enable(boolean isEnabled) {
+		dataSourceEnabled = isEnabled;
 	}
 
 }

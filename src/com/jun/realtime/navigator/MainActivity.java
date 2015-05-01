@@ -18,10 +18,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-import android.graphics.Paint;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
-import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Bundle;
@@ -51,7 +49,6 @@ public class MainActivity extends Activity {
 	private SampleDynamicXYDataSource sampleData;
 	private BluetoothLE gatt;
 
-	private Thread wifiThread;
 	private WiFiDoorController wifi;
 
 	private Button btnSearchBluetooth;
@@ -68,26 +65,7 @@ public class MainActivity extends Activity {
 
 	private void initializeWiFi() {
 		wifi = new WiFiDoorController(wifiServerAddress, wifiServerPort);
-
-		wifiThread = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				while (true) {
-					try {
-						Thread.sleep(10000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					wifi.openDoor();
-				}
-			}
-		});
-
-		wifiThread.setDaemon(true);
-		wifiThread.start();
+		gatt.registerHandler(wifi.getWifiHandler());
 	}
 
 	private void initializeBluetooth() {
@@ -205,6 +183,11 @@ public class MainActivity extends Activity {
 		}
 
 		dynamicPlot.redraw();
+	}
+	
+	public void onDrawThreadToggle(View v) {
+		boolean drawOn = ((ToggleButton) v).isChecked();
+		sampleData.enable(drawOn);
 	}
 
 	@Override
