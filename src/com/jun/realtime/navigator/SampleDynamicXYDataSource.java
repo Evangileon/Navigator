@@ -19,7 +19,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 	private Handler handler = null;
 	
-	
+	private boolean plotAvailable = false;
 	
 	@SuppressLint("HandlerLeak")
 	public void initializeHandler() {
@@ -37,18 +37,19 @@ public class SampleDynamicXYDataSource implements Runnable {
 				rssiValues[deviceId] = rssi;
 				deviceScanned[deviceId] = true;
 				
-//				for (boolean b : deviceScanned) {
-//					if (b == false) {
-//						// not sufficent rssi
-//						return;
-//					}
-//				}
+				for (boolean b : deviceScanned) {
+					if (b == false) {
+						// not sufficent rssi
+						return;
+					}
+				}
 				
 				// then calculate the x-y position
 				Point newPoint = positioningAlgorithm.getPositionUsingRSSI(rssiValues);
 				System.out.println("X = " + newPoint.getX() + " , Y = " + newPoint.getY());
-				if (newPoint != null) {
-					addPoint(newPoint);
+				if (newPoint != null && plotAvailable) {
+					addPoint(linearScaling(newPoint));
+					plotAvailable = false;
 				}
 					
 				// clear scan flags
@@ -57,6 +58,13 @@ public class SampleDynamicXYDataSource implements Runnable {
 				}
 			}
 		};
+	}
+	
+	public Point linearScaling(Point point) {
+		int x = point.x * 75 / 12;
+		int y = point.y * 155 / 30;
+		
+		return new Point(x, y);
 	}
 
 	public Handler getHandler() {
@@ -98,6 +106,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 				// TODO checking bluetooth devices status here, add one point
 				// refresh plot every 1 second
+				plotAvailable = true;
 				notifier.notifyObservers();
 			}
 

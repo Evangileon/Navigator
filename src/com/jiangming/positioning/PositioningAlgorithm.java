@@ -59,7 +59,7 @@ public class PositioningAlgorithm {
 			}
 		}
 
-		return new Point(estimationTable[lastSlot][3], estimationTable[lastSlot][4]);
+		return new Point(estimationTable[lastSlot][4], estimationTable[lastSlot][3]);
 	}
 
 //	public void readDataFromTxtFile() {
