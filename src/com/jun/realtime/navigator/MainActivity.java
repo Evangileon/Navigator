@@ -21,6 +21,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
+import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Bundle;
@@ -132,11 +133,15 @@ public class MainActivity extends Activity {
 		SampleDynamicXYSeries pathSeries = new SampleDynamicXYSeries(
 				sampleData, "Navigator Path");
 
-		LineAndPointFormatter formatter = new LineAndPointFormatter(Color.rgb(
-				0, 0, 0), null, null, null);
-		formatter.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
-		formatter.getLinePaint().setStrokeWidth(10);
-		dynamicPlot.addSeries(pathSeries, formatter);
+//		LineAndPointFormatter formatter = new LineAndPointFormatter(Color.rgb(
+//				0, 0, 0), null, null, null);
+		
+		LineAndPointFormatter formatter2 = new LineAndPointFormatter(Color.TRANSPARENT, Color.BLACK, null, null);
+		
+//		formatter.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
+//		formatter.getLinePaint().setStrokeWidth(10);
+		
+		dynamicPlot.addSeries(pathSeries, formatter2);
 
 		// hook up the plotUpdater to the data model:
 		sampleData.addObserver(plotUpdater);
