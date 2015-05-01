@@ -47,7 +47,7 @@ public class PositioningAlgorithm {
 		double lastEstimation = Double.MAX_VALUE;
 		int lastSlot = -1;
 
-		for (int i = 0; i < rssiValues.length; i++) {
+		for (int i = 0; i < estimationTable.length; i++) {
 			calculate = Math
 					.sqrt((Math.pow((rssiValues[0] - estimationTable[i][0]), 2)
 							+ Math.pow((rssiValues[1] - estimationTable[i][1]), 2)
@@ -59,7 +59,7 @@ public class PositioningAlgorithm {
 			}
 		}
 
-		return new Point(estimationTable[lastSlot][3], estimationTable[lastSlot][4]);
+		return new Point(estimationTable[lastSlot][4], estimationTable[lastSlot][3]);
 	}
 
 //	public void readDataFromTxtFile() {
