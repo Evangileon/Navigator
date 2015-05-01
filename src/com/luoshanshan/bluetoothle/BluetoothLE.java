@@ -96,6 +96,7 @@ public class BluetoothLE {
 			msg.arg1 = rssi;
 			msg.arg2 = getDeviceId(gatt);
 			externalHandler.sendMessage(msg);
+			System.out.println("device: " + msg.arg2 + " , RSSI = " + msg.arg1);
 			// System.out.println("#########data received###########");
 		}
 	};
