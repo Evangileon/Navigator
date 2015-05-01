@@ -19,6 +19,8 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 	private Handler handler = null;
 	
+	
+	
 	@SuppressLint("HandlerLeak")
 	public void initializeHandler() {
 		handler = new Handler() {
@@ -26,24 +28,25 @@ public class SampleDynamicXYDataSource implements Runnable {
 			public void handleMessage(Message msg) {
 				// TODO action when receive bluetooth data
 				int rssi = msg.arg1;
-				int deviceId = msg.arg2;
+				int deviceId = msg.arg2 - 1;
 				
-				if (deviceId > 3 || deviceId < 0) {
+				if (deviceId > 2 || deviceId < 0) {
 					return;
 				}
-				
+					
 				rssiValues[deviceId] = rssi;
 				deviceScanned[deviceId] = true;
 				
-				for (boolean b : deviceScanned) {
-					if (b == false) {
-						// not sufficent rssi
-						return;
-					}
-				}
+//				for (boolean b : deviceScanned) {
+//					if (b == false) {
+//						// not sufficent rssi
+//						return;
+//					}
+//				}
 				
 				// then calculate the x-y position
 				Point newPoint = positioningAlgorithm.getPositionUsingRSSI(rssiValues);
+				System.out.println("X = " + newPoint.getX() + " , Y = " + newPoint.getY());
 				if (newPoint != null) {
 					addPoint(newPoint);
 				}
@@ -76,6 +79,8 @@ public class SampleDynamicXYDataSource implements Runnable {
 	public SampleDynamicXYDataSource() {
 		notifier = new MyObservable();
 		positioningAlgorithm = new PositioningAlgorithm();
+		positioningAlgorithm.readDataFromTxtFile();
+		initializeHandler();
 	}
 
 	public void stopThread() {
