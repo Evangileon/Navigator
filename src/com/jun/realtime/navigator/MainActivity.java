@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
 
 	private void initializeWiFi() {
 		wifi = new WiFiDoorController(wifiServerAddress, wifiServerPort);
-		gatt.registerHandler(wifi.getWifiHandler());
+		//gatt.registerHandler(wifi.getWifiHandler());
 	}
 
 	private void initializeBluetooth() {
