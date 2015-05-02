@@ -71,7 +71,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 	public Point linearScaling(Point point) {
 		int x = point.x ;
-		int y = point.y * 6+100;
+		int y = point.y ;
 
 		return new Point(x, y);
 	}
