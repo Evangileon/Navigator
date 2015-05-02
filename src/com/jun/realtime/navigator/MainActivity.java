@@ -28,7 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import com.luoshanshan.bluetoothle.*;
@@ -49,6 +48,8 @@ public class MainActivity extends Activity {
 	private Thread sampleThread;
 	private SampleDynamicXYDataSource sampleData;
 	private BluetoothLE gatt;
+	
+	private Button clearBtn;
 
 	private WiFiDoorController wifi;
 
@@ -67,7 +68,7 @@ public class MainActivity extends Activity {
 
 	private void initializeWiFi() {
 		wifi = new WiFiDoorController(wifiServerAddress, wifiServerPort);
-		//gatt.registerHandler(wifi.getWifiHandler());
+		gatt.registerHandler(wifi.getWifiHandler());
 	}
 
 	private void initializeBluetooth() {
@@ -150,6 +151,17 @@ public class MainActivity extends Activity {
 				.setPathEffect(dashFx);
 		dynamicPlot.getGraphWidget().getRangeGridLinePaint()
 				.setPathEffect(dashFx);
+		
+		clearBtn = (Button) findViewById(R.id.button_clear_points);
+		clearBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				sampleData.clear();
+				dynamicPlot.redraw();
+			}
+		});
 	}
 	
 	public void messageBox(String title, String text) {

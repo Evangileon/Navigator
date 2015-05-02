@@ -175,6 +175,10 @@ public class SampleDynamicXYDataSource implements Runnable {
 
 		return path.get(index).getY();
 	}
+	
+	public void clear() {
+		path.clear();
+	}
 
 	public void addObserver(Observer observer) {
 		notifier.addObserver(observer);
