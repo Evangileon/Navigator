@@ -40,31 +40,31 @@ int x=0;int y=0;
 	public Point getPositionUsingRSSI(int[] rssiValues) {
 		if(Math.abs(rssiValues[0])<Math.abs(rssiValues[1])&& Math.abs(rssiValues[0])>75&& Math.abs(rssiValues[2])>90){
 			x=75;
-			y=0;
+			y=50;
 		}                           //point 1
 		if(Math.abs(rssiValues[0])<75){
 			x=75;
-			y=3;
+			y=75;
 		}                           //point 2
 		if(Math.abs((Math.abs(rssiValues[0])-Math.abs(rssiValues[1])))<5   &&   Math.abs(rssiValues[2])>85){
 			x=75;
-			y=6;
+			y=100;
 		}
 		if(Math.abs(rssiValues[1])<70){
 			x=75;
-			y=9;
+			y=125;
 		} 
 		if(Math.abs(rssiValues[0])>85&&   Math.abs((Math.abs(rssiValues[1])-Math.abs(rssiValues[2])))<5 ){
 			x=75;
-			y=12;
+			y=150;
 		} 
 		if(Math.abs(rssiValues[2])<70){
-			x=75;
-			y=15;
+			x=50;
+			y=150;
 		} 
 		if(Math.abs(rssiValues[0])>90&&Math.abs(rssiValues[1])>90&&Math.abs(rssiValues[2])<90){
-			x=75;
-			y=18;
+			x=25;
+			y=150;
 		} 
 		else{
 			
