@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import com.luoshanshan.bluetoothle.*;
@@ -61,6 +62,7 @@ public class MainActivity extends Activity {
 		initializePlot();
 		initializeBluetooth();
 		initializeWiFi();
+		
 	}
 
 	private void initializeWiFi() {
@@ -115,6 +117,7 @@ public class MainActivity extends Activity {
 //				0, 0, 0), null, null, null);
 		
 		LineAndPointFormatter formatter2 = new LineAndPointFormatter(Color.TRANSPARENT, Color.BLACK, null, null);
+		formatter2.getVertexPaint().setStrokeWidth(10);
 		
 //		formatter.getLinePaint().setStrokeJoin(Paint.Join.ROUND);
 //		formatter.getLinePaint().setStrokeWidth(10);
