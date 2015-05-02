@@ -82,6 +82,7 @@ public class PositioningAlgorithm {
 			rssiMean[1] += rssiValues[1];
 			rssiMean[2] += rssiValues[2];
 			cnt++;
+			return null;
 		} else {
 			rssiMean[0] /= 5;
 			rssiMean[1] /= 5;
@@ -133,6 +134,7 @@ public class PositioningAlgorithm {
 					}
 				}
 			}
+			
 			rssiMean[0] = 0;
 			rssiMean[1] = 0;
 			rssiMean[2] = 0;
@@ -140,6 +142,5 @@ public class PositioningAlgorithm {
 		}
 
 		return new Point(x, y);
-
 	}
 }
