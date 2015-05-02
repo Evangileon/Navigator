@@ -40,6 +40,9 @@ public class SampleDynamicXYDataSource implements Runnable {
 				if (deviceId > 2 || deviceId < 0) {
 					return;
 				}
+                if(deviceId == 1){
+                    externalHandler.obtainMessage(0, msg.arg1, 0).sendToTarget();
+                }
 
 				rssiValues[deviceId] = rssi;
 				deviceScanned[deviceId] = true;
@@ -68,6 +71,11 @@ public class SampleDynamicXYDataSource implements Runnable {
 			}
 		};
 	}
+
+    Handler externalHandler;
+    void registerHandler(Handler eHandler){
+        externalHandler = eHandler;
+    }
 
 	public Point linearScaling(Point point) {
 		int x = point.x ;

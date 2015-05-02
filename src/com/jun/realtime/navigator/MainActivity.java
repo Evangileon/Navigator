@@ -61,14 +61,16 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		initializePlot();
+        initializeWiFi();
 		initializeBluetooth();
-		initializeWiFi();
+
 		
 	}
 
 	private void initializeWiFi() {
 		wifi = new WiFiDoorController(wifiServerAddress, wifiServerPort);
-		gatt.registerWifiHandler(wifi.getWifiHandler());
+//		gatt.registerWifiHandler(wifi.getWifiHandler());
+        sampleData.registerHandler(wifi.getWifiHandler());
 	}
 
 	private void initializeBluetooth() {
