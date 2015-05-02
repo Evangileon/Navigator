@@ -20,7 +20,8 @@ public class BluetoothLE {
 
 	Context context;
 	//ArrayList<Handler> externalHandlers = new ArrayList<>();
-	Handler externalHandler = new Handler();
+	Handler externalHandler;
+	Handler wifiHandler;
 
 	private boolean gattConnectReadRssiOn;
 
@@ -34,11 +35,17 @@ public class BluetoothLE {
 		externalHandler = handler;
 	}
 	
+	public void registerWifiHandler(Handler handler) {
+		//externalHandlers.add(handler);
+		wifiHandler = handler;
+	}
+	
 	private void sendMessageToHandlers(Message msg) {
 //		for (Handler handler : externalHandlers) {
 //			handler.sendMessage(msg);
 //		}
 		externalHandler.sendMessage(msg);
+		wifiHandler.sendMessage(msg);
 	}
 
 	private void initialize() {

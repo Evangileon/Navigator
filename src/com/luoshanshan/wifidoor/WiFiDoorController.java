@@ -83,7 +83,7 @@ public class WiFiDoorController {
 	
 	public void openDoor() {
 		ledCommand("LED ON");
-		sendCommand("DOOR ON");
+		//sendCommand("DOOR ON");
 	}
 	
 	private void closeDoor(){
