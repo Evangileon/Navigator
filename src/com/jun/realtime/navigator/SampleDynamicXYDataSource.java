@@ -57,7 +57,7 @@ public class SampleDynamicXYDataSource implements Runnable {
 				System.out.println("X = " + newPoint.getX() + " , Y = "
 						+ newPoint.getY());
 				if (newPoint != null && timeSlotAvailable) {
-					addPoint(linearScaling(newPoint));
+					addPoint((newPoint));
 					timeSlotAvailable = false;
 				}
 
