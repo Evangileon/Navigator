@@ -62,4 +62,13 @@
         android:textOff="draw off"
         android:textOn="draw on" />
 
+    <Button
+        android:id="@+id/button_clear_points"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/dynamicXYPlot"
+        android:layout_alignLeft="@+id/dynamicXYPlot"
+        android:text="Clear Points" />
+
 </RelativeLayout>

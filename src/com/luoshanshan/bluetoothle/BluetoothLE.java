@@ -19,8 +19,8 @@ public class BluetoothLE {
 	private int NumOfDevice = 3;
 
 	Context context;
-	//ArrayList<Handler> externalHandlers = new ArrayList<>();
-	Handler externalHandler = new Handler();
+	ArrayList<Handler> externalHandlers = new ArrayList<>();
+	//Handler externalHandler = new Handler();
 
 	private boolean gattConnectReadRssiOn;
 
@@ -30,15 +30,14 @@ public class BluetoothLE {
 	}
 
 	public void registerHandler(Handler handler) {
-		//externalHandlers.add(handler);
-		externalHandler = handler;
+		externalHandlers.add(handler);
 	}
 	
 	private void sendMessageToHandlers(Message msg) {
-//		for (Handler handler : externalHandlers) {
-//			handler.sendMessage(msg);
-//		}
-		externalHandler.sendMessage(msg);
+		for (Handler handler : externalHandlers) {
+			handler.sendMessage(msg);
+		}
+		//externalHandler.sendMessage(msg);
 	}
 
 	private void initialize() {
